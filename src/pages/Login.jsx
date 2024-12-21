@@ -115,6 +115,7 @@ export default function Login() {
 								</span>
 							</div>
 						</div>
+                        <p className="text-red-500">{error}</p>
 
 						<p className="underline flex justify-end text-sm md:text-base">
 							Forget password?
