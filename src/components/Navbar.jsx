@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
@@ -9,7 +9,9 @@ import { ModeToggle } from "./mode-toggle";
 
 export default function Navbar() {
 	const { user, signOutUser } = useContext(ThemeContext);
-
+	const [showDisplayName, setShowDisplayName] = useState(false);
+	const [dropdownOpen, setDropdownOpen] = useState(false);
+	
 	const handleEvent = () => {
 		signOutUser()
 			.then(() => {
@@ -19,9 +21,19 @@ export default function Navbar() {
 				console.log(error);
 			});
 	};
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+		  if (!event.target.closest(".relative")) {
+			setDropdownOpen(false);
+		  }
+		};
+		document.addEventListener("click", handleClickOutside);
+		return () => document.removeEventListener("click", handleClickOutside);
+	  }, []);
+
 
 	return (
-		<header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 border ">
+		<header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 border">
 			<Sheet>
 				<SheetTrigger asChild>
 					<Button variant="outline" size="icon" className="lg:hidden">
@@ -36,7 +48,6 @@ export default function Navbar() {
 					<div className="grid gap-2 py-6">
 						<Link
 							to={"/"}
-							href="#"
 							className="flex w-full items-center py-2 text-lg font-semibold"
 							prefetch={false}
 						>
@@ -44,7 +55,6 @@ export default function Navbar() {
 						</Link>
 						<Link
 							to={"/assignments"}
-							href=""
 							className="flex w-full items-center py-2 text-lg font-semibold"
 							prefetch={false}
 						>
@@ -53,21 +63,18 @@ export default function Navbar() {
 						{user && (
 							<>
 								<Link
-									to={""}
-									href=""
+									to={"/pending_assignments"}
 									className="flex w-full items-center py-2 text-lg font-semibold"
 									prefetch={false}
 								>
 									Pending Assignments
 								</Link>
-								
 							</>
 						)}
 						{!user && (
 							<>
 								<Link
 									to={"/login"}
-									href="/login"
 									className="flex w-full items-center py-2 text-lg font-semibold"
 									prefetch={false}
 								>
@@ -75,7 +82,6 @@ export default function Navbar() {
 								</Link>
 								<Link
 									to={"/register"}
-									href="/register"
 									className="flex w-full items-center py-2 text-lg font-semibold"
 									prefetch={false}
 								>
@@ -94,14 +100,12 @@ export default function Navbar() {
 			<nav className="ml-auto hidden lg:flex gap-6">
 				<Link
 					to={"/"}
-					href="/"
 					className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
 				>
 					Home
 				</Link>
 				<Link
 					to={"/assignments"}
-					href=""
 					className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
 				>
 					Assignments
@@ -109,52 +113,74 @@ export default function Navbar() {
 				{user && (
 					<>
 						<Link
-							to={""}
-							href=""
+							to={"/pending_assignments"}
 							className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
 						>
 							Pending Assignments
 						</Link>
-					
 					</>
 				)}
 				{!user ? (
 					<>
 						<Link
 							to={"/login"}
-							href="/login"
 							className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
 						>
 							Log In
 						</Link>
 						<Link
 							to={"/register"}
-							href="/register"
 							className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
 						>
 							Register
 						</Link>
-						<Avatar>
-							<AvatarImage src="https://cdn-icons-png.flaticon.com/512/9187/9187604.png" />
-							<AvatarFallback>CN</AvatarFallback>
-						</Avatar>
 					</>
 				) : (
-					<div className="flex items-center gap-4">
-						<div className="relative">
+					<div className="relative">
+						<div
+							className="flex items-center gap-4 cursor-pointer"
+							onMouseEnter={() => setShowDisplayName(true)}
+							onMouseLeave={() => setShowDisplayName(false)}
+							onClick={() => setDropdownOpen(!dropdownOpen)}
+						>
 							<img
 								src={user.photoURL}
 								alt="User Photo"
-								className="h-10 w-10 rounded-full cursor-pointer"
-								onMouseOver={() => user.displayName}
+								className="h-10 w-10 rounded-full"
 							/>
+							{showDisplayName && (
+								<span className="absolute top-full mt-1 bg-gray-100 text-gray-900 text-base py-1 px-2 rounded-md shadow-md">
+									{user.displayName}
+								</span>
+							)}
 						</div>
-						<Button variant="outline" onClick={handleEvent}>
-							Log Out
-						</Button>
+						{dropdownOpen && (
+							<div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-md z-50">
+								<Link
+									to="/create_assignments"
+									className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+								>
+									Create Assignments
+								</Link>
+								<Link
+									to="/my_assignments"
+									className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+								>
+									My  Assignments
+								</Link>
+								<div className="border-t my-2"></div>
+								<Button
+									variant="ghost"
+									className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+									onClick={handleEvent}
+								>
+									Log Out
+								</Button>
+							</div>
+						)}
 					</div>
 				)}
-				<ModeToggle></ModeToggle>
+				<ModeToggle />
 			</nav>
 		</header>
 	);

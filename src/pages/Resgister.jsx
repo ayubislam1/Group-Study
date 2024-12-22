@@ -45,29 +45,29 @@ export default function Register() {
 		}
 
 		createUser(email, pass)
-			// .then(() => {
-			// 	fetch("http://localhost:4000/users", {
-			// 		method: "POST",
-			// 		headers: {
-			// 			"Content-Type": "application/json",
-			// 		},
-			// 		body: JSON.stringify(newUser),
-			// 	})
-			// 		.then((res) => res.json())
-			// 		.then((data) => {
-			// 			if (data.insertedId) {
-			// 				Swal.fire({
-			// 					position: "top-center",
-			// 					icon: "success",
-			// 					title: "Sign up success",
-			// 					showConfirmButton: false,
-			// 					timer: 1500,
-			// 				});
-			// 				navigate("/");
-			// 				form.reset();
-			// 			}
-			// 		});
-			// })
+			.then(() => {
+				fetch("http://localhost:7000/users",{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(newUser),
+				})
+					.then((res) => res.json())
+					.then((data) => {
+						if (data.insertedId) {
+							Swal.fire({
+								position: "top-center",
+								icon: "success",
+								title: "Sign up success",
+								showConfirmButton: false,
+								timer: 1500,
+							});
+							navigate("/");
+							form.reset();
+						}
+					});
+			})
 			.catch((error) => {
 				console.log(error);
 			});
