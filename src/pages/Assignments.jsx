@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import {
 	Dialog,
-	DialogTrigger,
 	DialogContent,
 	DialogHeader,
 	DialogFooter,
@@ -10,7 +9,7 @@ import {
 	DialogDescription,
 } from "../components/ui/dialog";
 import { Button } from "../components/ui/button";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
 
 const Assignments = () => {
@@ -21,40 +20,56 @@ const Assignments = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		
-		fetch("http://localhost:7000/assignments")
-			.then((res) => res.json())
-			.then((data) => setAssignments(data));
+		const fetchAssignments = async () => {
+			try {
+				const res = await fetch("http://localhost:7000/assignments");
+				if (!res.ok) throw new Error("Failed to fetch assignments.");
+				const data = await res.json();
+				setAssignments(data);
+			} catch (error) {
+				toast.error("Error fetching assignments.");
+			}
+		};
+		fetchAssignments();
 	}, []);
 
 	const handleDeleteAssignment = async (id) => {
-		if (user.email === selectedAssignment.email) {
-			const res = await fetch(`http://localhost:7000/assignments/${id}`, {
-				method: "DELETE",
-			});
-
-			if (res.ok) {
-				toast.success("Assignment deleted successfully.");
-				setAssignments(
-					assignments.filter((assignment) => assignment.id !== id)
-				);
-			} else {
-				toast.error("Error deleting the assignment.");
-			}
-		} else {
-			toast.error("You can only delete your own assignments.");
+		const assignmentToDelete = assignments.find(
+			(assignment) => assignment._id === id
+		);
+		if (!assignmentToDelete) {
+			toast.error("Assignment not found.");
+			return;
 		}
 
-		setShowDeleteDialog(false);
+		if (user.email !== assignmentToDelete.email) {
+			toast.error("You can only delete your own assignments.");
+			setShowDeleteDialog(false);
+			return;
+		}
+
+		try {
+			const res = await fetch(`http://localhost:7000/assignments/${id}`, {
+				method: "DELETE",
+				headers: {
+					"Content-type": "application/json",
+				},
+			});
+
+			
+			toast.success("Assignment deleted successfully.");
+			setAssignments((prev) =>
+				prev.filter((assignment) => assignment._id !== id)
+			);
+		} catch (error) {
+			toast.error(error.message || "Error deleting the assignment.");
+		} finally {
+			setShowDeleteDialog(false);
+		}
 	};
 
-	const handleViewAssignment = (id) => {
-		navigate.push(`/assignment/${id}`);
-	};
-
-	const handleUpdateAssignment = (id) => {
-		navigate.push(`/update-assignment/${id}`);
-	};
+	const handleViewAssignment = (id) => navigate(`/assignments/${id}`);
+	const handleUpdateAssignment = (id) => navigate(`/update-assignment/${id}`);
 
 	return (
 		<div className="container mx-auto p-4">
@@ -75,7 +90,7 @@ const Assignments = () => {
 						<p>Difficulty: {assignment.difficulty}</p>
 						<div className="flex space-x-2 mt-4">
 							<Button
-								onClick={() => handleViewAssignment(assignment.id)}
+								onClick={() => handleViewAssignment(assignment._id)}
 								variant="outline"
 								className="text-blue-600 hover:bg-blue-100"
 							>
@@ -84,7 +99,7 @@ const Assignments = () => {
 							{user?.email === assignment.email && (
 								<>
 									<Button
-										onClick={() => handleUpdateAssignment(assignment.id)}
+										onClick={() => handleUpdateAssignment(assignment._id)}
 										variant="outline"
 										className="text-yellow-600 hover:bg-yellow-100"
 									>
@@ -92,7 +107,7 @@ const Assignments = () => {
 									</Button>
 									<Button
 										onClick={() => {
-											setSelectedAssignment(assignment);
+											setSelectedAssignment(assignment._id);
 											setShowDeleteDialog(true);
 										}}
 										variant="outline"
@@ -124,7 +139,7 @@ const Assignments = () => {
 							Cancel
 						</Button>
 						<Button
-							onClick={() => handleDeleteAssignment(selectedAssignment.id)}
+							onClick={() => handleDeleteAssignment(selectedAssignment)}
 							className="bg-red-500 text-white"
 						>
 							Confirm Delete
@@ -132,6 +147,7 @@ const Assignments = () => {
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
+			<ToastContainer></ToastContainer>
 		</div>
 	);
 };
