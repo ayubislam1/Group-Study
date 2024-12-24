@@ -23,7 +23,7 @@ const AssignmentDetail = () => {
 			);
 	}, [id]);
 
-	const { marks, description, image } = assignment;
+	const { marks, description, image, title } = assignment;
 	console.log(assignment);
 	const handleSubmit = async () => {
 		if (!googleDocsLink.trim()) {
@@ -38,10 +38,10 @@ const AssignmentDetail = () => {
 				note,
 				email: user.email,
 				status: "pending",
-
 				marks,
 				description,
 				image,
+				title,
 			});
 			alert("Assignment submitted successfully!");
 			setModalOpen(false);
