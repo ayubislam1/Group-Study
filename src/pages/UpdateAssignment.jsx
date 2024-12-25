@@ -5,16 +5,19 @@ import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Loading from "../components/ui/Loading";
+import { WarningProvider } from "@radix-ui/react-dialog";
 
 const UpdateAssignment = () => {
 	const { id } = useParams();
 	console.log("ID from URL:", id);
 	const [assignment, setAssignment] = useState(null);
+	const [errorSms, setError] = useState("");
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!id) {
-			console.error("No ID provided in URL"); 
+			console.error("No ID provided in URL");
 			return;
 		}
 
@@ -29,7 +32,31 @@ const UpdateAssignment = () => {
 			.then((data) => setAssignment(data))
 			.catch((error) => console.error(error.message));
 	}, [id]);
+
 	const handleUpdate = async () => {
+		if (
+			!assignment.title ||
+			!assignment.marks ||
+			!assignment.difficulty ||
+			!assignment.image
+		) {
+			setError("Please fill out all fields.");
+			return;
+		}
+        setError("")
+		// Marks validation (must be a number and greater than 0)
+		if (isNaN(assignment.marks) || assignment.marks <= 0) {
+			alert("Please enter a valid number for marks.");
+			return;
+		}
+
+		// URL validation for image
+		const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+		if (!urlRegex.test(assignment.image)) {
+			alert("Please enter a valid image URL.");
+			return;
+		}
+
 		const updatedData = {
 			title: assignment.title.trim(),
 			marks: Number(assignment.marks),
@@ -61,41 +88,85 @@ const UpdateAssignment = () => {
 		}
 	};
 
-	if (!assignment) return <p>Loading...</p>;
+	if (!assignment) return <Loading />;
+    
 
 	return (
 		<div className="container mx-auto p-4">
 			<h1 className="text-3xl font-bold mb-4">Update Assignment</h1>
 			<div className="bg-white p-6 rounded-lg shadow-md">
-				<Input
-					value={assignment.title}
-					onChange={(e) =>
-						setAssignment({ ...assignment, title: e.target.value })
-					}
-					className="mb-4"
-				/>
-				<Input
-					value={assignment.marks}
-					onChange={(e) =>
-						setAssignment({ ...assignment, marks: e.target.value })
-					}
-					type="number"
-					className="mb-4"
-				/>
-				<Input
-					value={assignment.difficulty}
-					onChange={(e) =>
-						setAssignment({ ...assignment, difficulty: e.target.value })
-					}
-					className="mb-4"
-				/>
-				<Textarea
-					value={assignment.image}
-					onChange={(e) =>
-						setAssignment({ ...assignment, image: e.target.value })
-					}
-					className="mb-4"
-				/>
+				<div className="mb-4">
+					<label
+						htmlFor="title"
+						className="block text-lg font-medium text-gray-700"
+					>
+						Title
+					</label>
+					<Input
+						id="title"
+						value={assignment.title}
+						onChange={(e) =>
+							setAssignment({ ...assignment, title: e.target.value })
+						}
+						className="mt-1"
+					/>
+					<p className="text-red-500">{errorSms}</p>
+				</div>
+
+				<div className="mb-4">
+					<label
+						htmlFor="marks"
+						className="block text-lg font-medium text-gray-700"
+					>
+						Marks
+					</label>
+                    
+					<Input
+						id="marks"
+						value={assignment.marks}
+						onChange={(e) =>
+							setAssignment({ ...assignment, marks: e.target.value })
+						}
+						type="number"
+						className="mt-1"
+					/>
+                    
+				</div>
+
+				<div className="mb-4">
+					<label
+						htmlFor="difficulty"
+						className="block text-lg font-medium text-gray-700"
+					>
+						Difficulty
+					</label>
+					<Input
+						id="difficulty"
+						value={assignment.difficulty}
+						onChange={(e) =>
+							setAssignment({ ...assignment, difficulty: e.target.value })
+						}
+						className="mt-1"
+					/>
+				</div>
+
+				<div className="mb-4">
+					<label
+						htmlFor="image"
+						className="block text-lg font-medium text-gray-700"
+					>
+						Image URL
+					</label>
+					<Textarea
+						id="image"
+						value={assignment.image}
+						onChange={(e) =>
+							setAssignment({ ...assignment, image: e.target.value })
+						}
+						className="mt-1"
+					/>
+				</div>
+
 				<Button onClick={handleUpdate} className="bg-blue-600 text-white">
 					Update Assignment
 				</Button>

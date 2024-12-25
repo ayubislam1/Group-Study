@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router";
 import { Button } from "../components/ui/button";
 import useAuth from "../hooks/useAuth";
+import Loading from "../components/ui/Loading";
 
 const GiveMark = () => {
 	const [assignment, setAssignment] = useState(null);
@@ -49,29 +50,45 @@ const GiveMark = () => {
 			alert("Error marking the assignment.");
 		}
 	};
-
-	if (!assignment) return <div>Loading...</div>;
+	// if (assignment?.email === user.email) {
+	//     return <div className="min-h-screen flex justify-center items-center">You cannot mark your own assignment.</div>
+	//   }
+	if (!assignment) return <Loading></Loading>;
 
 	return (
 		<div className="container mx-auto p-5">
 			<h1 className="text-2xl font-bold mb-5">Mark Assignment</h1>
-			<p>
-				<strong>Title:</strong> {assignment.title}
-			</p>
-			<p>
-				<strong>Google Docs Link:</strong>{" "}
-				<Link
-					to={assignment.googleDocsLink}
-					target="_blank"
-					rel="noopener noreferrer"
-					className="text-blue-500 underline"
-				>
-					Open Document
-				</Link>
-			</p>
-			<p>
-				<strong>Note:</strong> {assignment.note}
-			</p>
+			<div className="flex justify-between items-center">
+				<div>
+					<p>
+						<strong>Title:</strong> {assignment.title}
+					</p>
+					<p>
+						<strong>Google Docs Link:</strong>{" "}
+						<Link
+							to={assignment.googleDocsLink}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="text-blue-500 underline"
+						>
+							Open Document
+						</Link>
+					</p>
+                    <p>
+						<strong>Note:</strong> {assignment.note}
+					</p>
+				</div>
+				<div>
+					
+					<p>
+						<strong>TotalMark:</strong> {assignment.marks}
+					</p>
+					<p>
+						<strong>Due Date:</strong> {assignment.dueDate}
+					</p>
+				</div>
+			</div>
+
 			<div className="mt-5">
 				<label className="block mb-2">
 					<strong>Marks:</strong>
@@ -79,7 +96,6 @@ const GiveMark = () => {
 				<input
 					type="number"
 					value={ObtainMarks}
-                    
 					onChange={(e) => setMarks(e.target.value)}
 					className="w-full p-2 border rounded"
 				/>

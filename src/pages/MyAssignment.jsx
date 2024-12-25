@@ -1,43 +1,51 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
+import Loading from "../components/ui/Loading";
 
 const MyAssignments = () => {
 	const [assignments, setAssignments] = useState([]);
+	const [loading, setLoading] = useState(true);
 	const [assignment, setAssignment] = useState([]);
 	const { user } = useAuth();
-	console.log("data",assignments);
+	
 	useEffect(() => {
-		if (!user) return; 
-
 		
+
 		axios
 			.get(`http://localhost:7000/submit-assignment`)
 			.then((response) => {
-				setAssignments(response.data);
+			setAssignments(response.data);
+            setLoading(false);
 			})
 			.catch((err) => console.error("Error fetching assignments: ", err));
 	}, [user]);
 
 	useEffect(() => {
 		try {
-			if (assignments && user?.displayName) {
+			if (assignments && user?.email) {
 				const filteredAssignment = assignments.filter(
-					(assignmentItem) => assignmentItem?.email === user.email
+					(assignmentItem) => assignmentItem.email === user.email
 				);
 				setAssignment(filteredAssignment);
+                
 			}
-			
 		} catch (err) {
 			console.log("Failed to load campaigns. Please try again later.");
-		} finally {
-			// setIsLoading(false);
-		}
+		} 
 	}, [assignments, user]);
+	if (loading) {
+		return <Loading></Loading>;
+	}
 
-	if (!user) return <div className="min-h-screen flex justify-center items-center">Please log in to view your assignments.</div>;
+	else if (!user)
+		return (
+			<div className="min-h-screen flex justify-center items-center">
+				Please log in to view your assignments.
+			</div>
+		);
 
-	if (assignments.length === 0) {
+	else if (assignments.length === 0) {
 		return (
 			<div className="text-center mt-10">No assignments submitted yet.</div>
 		);

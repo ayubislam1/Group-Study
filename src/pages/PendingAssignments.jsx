@@ -3,32 +3,41 @@ import axios from "axios";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
+import Loading from "../components/ui/Loading";
 
 const PendingAssignments = () => {
 	const [pendingAssignments, setPendingAssignments] = useState([]);
+	const [loading, setLoading] = useState(true);
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!user) return;
-
 		axios
 			.get("http://localhost:7000/submit-assignment")
 			.then((response) => {
 				setPendingAssignments(
 					response.data.filter(
-						(assignment) => assignment.email === user.email && assignment.status === "pending"
+						(assignment) =>
+							assignment.email === user.email && assignment.status === "pending"
 					)
 				);
+				setLoading(false);
 			})
-			.catch((err) => console.error("Error fetching pending assignments: ", err));
+			.catch((err) =>
+				console.error("Error fetching pending assignments: ", err)
+			);
 	}, [user]);
 
+	if (loading) {
+		return <Loading />;
+	}
 	if (!user) return <div>Please log in to view pending assignments.</div>;
 
 	if (pendingAssignments.length === 0) {
 		return (
-			<div className="min-h-screen flex justify-center items-center">No pending assignments to evaluate.</div>
+			<div className="min-h-screen flex justify-center items-center">
+				No pending assignments to evaluate.
+			</div>
 		);
 	}
 
