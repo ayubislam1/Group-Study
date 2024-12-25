@@ -19,14 +19,14 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 
 const CreateAssignmentPage = () => {
-	const [title, setTitle] = useState(""); // Ensure initial state is an empty string
-	const [description, setDescription] = useState(""); // Ensure initial state is an empty string
-	const [marks, setMarks] = useState(""); // Ensure initial state is an empty string
-	const [image, setImage] = useState(""); // Ensure initial state is an empty string
-	const [difficulty, setDifficulty] = useState(""); // Ensure initial state is an empty string
-	const [dueDate, setDueDate] = useState(null); // No change, as it's null initially
-	const [name, setName] = useState(""); // Ensure initial state is an empty string
-	const [email, setEmail] = useState(""); // Ensure initial state is an empty string
+	const [title, setTitle] = useState(""); 
+	const [description, setDescription] = useState("");
+	const [marks, setMarks] = useState("");
+	const [image, setImage] = useState("");
+	const [difficulty, setDifficulty] = useState(""); 
+	const [dueDate, setDueDate] = useState(null); 
+	const [name, setName] = useState(""); 
+	const [email, setEmail] = useState(""); 
 	const [successMessage, setSuccessMessage] = useState("");
 	const { user } = useAuth();
 
@@ -71,20 +71,20 @@ const CreateAssignmentPage = () => {
 				},
 			});
 
-			// Handle success response
+			
 			if (response.status === 200) {
 				setSuccessMessage("Assignment created successfully!");
 				setTimeout(() => setSuccessMessage(""), 3000);
 
-				// Reset fields
+		
 				setTitle("");
 				setDescription("");
 				setMarks("");
 				setImage("");
 				setDifficulty("");
 				setDueDate(null);
-				setName(""); // Reset name
-				setEmail(""); // Reset email
+				setName(""); 
+				setEmail(""); 
 			}
 		} catch (error) {
 			console.error("Error creating assignment:", error);

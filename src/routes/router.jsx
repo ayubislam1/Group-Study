@@ -10,6 +10,7 @@ import CreateAssignment from "../pages/CreateAssignment";
 import MyAssignment from "../pages/MyAssignment";
 import UpdateAssignment from "../pages/UpdateAssignment";
 import AssignmentDetail from "../pages/AssignmentDetailes";
+import GiveMark from "../pages/GiveMark";
 
 const router = createBrowserRouter([
 	{
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
 				path: "/assignments/:id",
 				element: <AssignmentDetail></AssignmentDetail>,
 			},
+			{
+				path:"/give-mark/:id",
+				element:<GiveMark></GiveMark>
+			}
 		],
 	},
 ]);

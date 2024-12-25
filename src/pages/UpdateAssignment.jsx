@@ -8,13 +8,13 @@ import axios from "axios";
 
 const UpdateAssignment = () => {
 	const { id } = useParams();
-	console.log("ID from URL:", id); // Debugging log
+	console.log("ID from URL:", id);
 	const [assignment, setAssignment] = useState(null);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!id) {
-			console.error("No ID provided in URL"); // Debugging error
+			console.error("No ID provided in URL"); 
 			return;
 		}
 

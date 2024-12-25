@@ -8,9 +8,9 @@ const MyAssignments = () => {
 	const { user } = useAuth();
 	console.log("data",assignments);
 	useEffect(() => {
-		if (!user) return; // Skip if user is null
+		if (!user) return; 
 
-		// Fetch submitted assignments for the logged-in user
+		
 		axios
 			.get(`http://localhost:7000/submit-assignment`)
 			.then((response) => {
@@ -27,7 +27,7 @@ const MyAssignments = () => {
 				);
 				setAssignment(filteredAssignment);
 			}
-			// eslint-disable-next-line no-unused-vars
+			
 		} catch (err) {
 			console.log("Failed to load campaigns. Please try again later.");
 		} finally {
