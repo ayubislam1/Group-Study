@@ -11,9 +11,11 @@ import {
 import { Button } from "../components/ui/button";
 import { ToastContainer, toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
+import Loading from "../components/ui/Loading";
 
 const Assignments = () => {
 	const [assignments, setAssignments] = useState([]);
+	const [loading, setLoading] = useState(true);
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 	const [selectedAssignment, setSelectedAssignment] = useState(null);
 	const { user } = useAuth();
@@ -26,9 +28,10 @@ const Assignments = () => {
 				if (!res.ok) throw new Error("Failed to fetch assignments.");
 				const data = await res.json();
 				setAssignments(data);
+                setLoading(false);
 			} catch (error) {
 				toast.error("Error fetching assignments.");
-			}
+			} 
 		};
 		fetchAssignments();
 	}, []);
@@ -56,7 +59,6 @@ const Assignments = () => {
 				},
 			});
 
-			
 			toast.success("Assignment deleted successfully.");
 			setAssignments((prev) =>
 				prev.filter((assignment) => assignment._id !== id)
@@ -70,7 +72,7 @@ const Assignments = () => {
 
 	const handleViewAssignment = (id) => navigate(`/assignments/${id}`);
 	const handleUpdateAssignment = (id) => navigate(`/update-assignment/${id}`);
-
+	if (loading) return <Loading></Loading>;
 	return (
 		<div className="container mx-auto p-4">
 			<h1 className="text-3xl font-bold mb-8">Assignments</h1>

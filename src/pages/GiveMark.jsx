@@ -6,13 +6,12 @@ import useAuth from "../hooks/useAuth";
 
 const GiveMark = () => {
 	const [assignment, setAssignment] = useState(null);
-	const [marks, setMarks] = useState("");
+	const [ObtainMarks, setMarks] = useState("");
 	const [feedback, setFeedback] = useState("");
 	const { id } = useParams();
-	console.log(id);
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	console.log("link", assignment?.googleDocsLink);
+
 	useEffect(() => {
 		if (!id) {
 			console.error("No ID provided in URL");
@@ -32,30 +31,26 @@ const GiveMark = () => {
 
 	const handleSubmit = async () => {
 		try {
-			if (!marks || !feedback) {
+			if (!ObtainMarks || !feedback) {
 				alert("Please provide marks and feedback.");
 				return;
 			}
 
-			await axios.post(`http://localhost:7000/mark-assignment`, {
+			await axios.put(`http://localhost:7000/submit-assignment/${id}`, {
 				assignmentId: id,
-				marks,
+				ObtainMarks,
 				feedback,
 				email: user.email,
 			});
 
 			alert("Assignment marked successfully!");
-			navigate("/pending-assignments");
+			navigate("/pending_assignments");
 		} catch (error) {
 			alert("Error marking the assignment.");
 		}
 	};
 
 	if (!assignment) return <div>Loading...</div>;
-
-	// if (assignment.email === user.email) {
-	// 	return <div className="min-h-screen flex justify-center items-center">You cannot mark your own assignment.</div>;
-	// }
 
 	return (
 		<div className="container mx-auto p-5">
@@ -83,7 +78,8 @@ const GiveMark = () => {
 				</label>
 				<input
 					type="number"
-					value={marks}
+					value={ObtainMarks}
+                    
 					onChange={(e) => setMarks(e.target.value)}
 					className="w-full p-2 border rounded"
 				/>

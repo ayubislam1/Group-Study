@@ -20,6 +20,7 @@ export const ThemeContext = createContext(null);
 const ContextProvider = ({ children }) => {
 	const [user, setUsers] = useState(null);
 	const [loader, setLoader] = useState(true);
+	
 	const googleProvider = () => {
 		const provider = new GoogleAuthProvider();
 		return signInWithPopup(auth, provider);

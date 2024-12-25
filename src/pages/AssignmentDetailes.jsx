@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router";
+import {  useParams } from "react-router";
 import { Button } from "../components/ui/button";
 import useAuth from "../hooks/useAuth";
+import Loading from "../components/ui/Loading";
 
 const AssignmentDetail = () => {
 	const [assignment, setAssignment] = useState("");
@@ -11,7 +12,7 @@ const AssignmentDetail = () => {
 	const [note, setNote] = useState("");
 	const { id } = useParams();
 	const { user } = useAuth();
-
+	
 	useEffect(() => {
 		axios
 			.get(`http://localhost:7000/assignments/${id}`)
@@ -23,7 +24,7 @@ const AssignmentDetail = () => {
 			);
 	}, [id]);
 
-	const { marks, description, image, title } = assignment;
+	const { marks, description, image, title, name } = assignment;
 	console.log(assignment);
 	const handleSubmit = async () => {
 		if (!googleDocsLink.trim()) {
@@ -42,17 +43,20 @@ const AssignmentDetail = () => {
 				description,
 				image,
 				title,
+				name,
 			});
 			alert("Assignment submitted successfully!");
 			setModalOpen(false);
 			setGoogleDocsLink("");
 			setNote("");
 		} catch (error) {
-			alert("Error submitting the assignment.");
+			alert("After log in you can submit");
+			n;
+           
 		}
 	};
 
-	if (!assignment) return <div>Loading...</div>;
+	if (!assignment) return <Loading></Loading> ;
 
 	return (
 		<div className="container mx-auto p-5">

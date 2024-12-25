@@ -35,7 +35,7 @@ const MyAssignments = () => {
 		}
 	}, [assignments, user]);
 
-	if (!user) return <div>Please log in to view your assignments.</div>;
+	if (!user) return <div className="min-h-screen flex justify-center items-center">Please log in to view your assignments.</div>;
 
 	if (assignments.length === 0) {
 		return (
@@ -65,7 +65,7 @@ const MyAssignments = () => {
 							</td>
 							<td className="border border-gray-300 p-2">{assignment.marks}</td>
 							<td className="border border-gray-300 p-2">
-								{assignment.obtainedMarks ?? "Pending"}
+								{assignment.ObtainMarks ?? "Pending"}
 							</td>
 							<td className="border border-gray-300 p-2">
 								{assignment.note || "N/A"}

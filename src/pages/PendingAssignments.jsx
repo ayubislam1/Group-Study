@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "../components/ui/button";
-import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import useAuth from "../hooks/useAuth";
 
 const PendingAssignments = () => {
 	const [pendingAssignments, setPendingAssignments] = useState([]);
-	console.log(pendingAssignments);
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
@@ -17,21 +16,19 @@ const PendingAssignments = () => {
 			.get("http://localhost:7000/submit-assignment")
 			.then((response) => {
 				setPendingAssignments(
-					response.data.filter((assignment) => assignment.email == user.email)
+					response.data.filter(
+						(assignment) => assignment.email === user.email && assignment.status === "pending"
+					)
 				);
 			})
-			.catch((err) =>
-				console.error("Error fetching pending assignments: ", err)
-			);
+			.catch((err) => console.error("Error fetching pending assignments: ", err));
 	}, [user]);
 
 	if (!user) return <div>Please log in to view pending assignments.</div>;
 
 	if (pendingAssignments.length === 0) {
 		return (
-			<div className="text-center mt-10">
-				No pending assignments to evaluate.
-			</div>
+			<div className="min-h-screen flex justify-center items-center">No pending assignments to evaluate.</div>
 		);
 	}
 
@@ -52,9 +49,7 @@ const PendingAssignments = () => {
 						<tr key={assignment._id}>
 							<td className="border border-gray-300 p-2">{assignment.title}</td>
 							<td className="border border-gray-300 p-2">{assignment.marks}</td>
-							<td className="border border-gray-300 p-2">
-								{assignment.examineeName}
-							</td>
+							<td className="border border-gray-300 p-2">{assignment.name}</td>
 							<td className="border border-gray-300 p-2">
 								<Button
 									onClick={() => navigate(`/give-mark/${assignment._id}`)}
