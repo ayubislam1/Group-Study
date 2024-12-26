@@ -101,6 +101,7 @@ export default function Login() {
 									name="pass"
 									required
 									className="w-full"
+                                   
 								/>
 
 								<span

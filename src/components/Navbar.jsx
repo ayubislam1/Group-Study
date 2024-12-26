@@ -171,7 +171,7 @@ export default function Navbar() {
 								<div className="border-t my-2"></div>
 								<Button
 									variant="ghost"
-									className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+									className="w-full text-left px-4 py-2 text-sm text-gray-700  hover:bg-blue-400 dark:hover:text-white"
 									onClick={handleEvent}
 								>
 									Log Out

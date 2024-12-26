@@ -13,18 +13,20 @@ const PendingAssignments = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:7000/submit-assignment")
+			.get("http://localhost:7000/submit-assignment", { withCredentials: true })
 			.then((response) => {
 				setPendingAssignments(
 					response.data.filter(
 						(assignment) =>
-							assignment.email === user.email && assignment.status === "pending"
+							assignment?.email === user?.email &&
+							assignment.status === "pending"
 					)
 				);
 				setLoading(false);
 			})
-			.catch((err) =>
-				console.error("Error fetching pending assignments: ", err)
+			.catch(
+				(err) => console.error("Error fetching pending assignments: ", err),
+				setLoading(false)
 			);
 	}, [user]);
 
@@ -41,12 +43,13 @@ const PendingAssignments = () => {
 		);
 	}
 
+
 	return (
 		<div className="container mx-auto p-5">
 			<h1 className="text-2xl font-bold mb-5">Pending Assignments</h1>
 			<table className="w-full border-collapse border border-gray-300">
 				<thead>
-					<tr className="bg-gray-100">
+					<tr className="bg-gray-100 dark:bg-transparent">
 						<th className="border border-gray-300 p-2">Title</th>
 						<th className="border border-gray-300 p-2">Marks</th>
 						<th className="border border-gray-300 p-2">Examinee Name</th>

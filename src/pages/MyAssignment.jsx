@@ -8,18 +8,35 @@ const MyAssignments = () => {
 	const [loading, setLoading] = useState(true);
 	const [assignment, setAssignment] = useState([]);
 	const { user } = useAuth();
-	
-	useEffect(() => {
-		
 
-		axios
-			.get(`http://localhost:7000/submit-assignment`)
-			.then((response) => {
-			setAssignments(response.data);
-            setLoading(false);
-			})
-			.catch((err) => console.error("Error fetching assignments: ", err));
-	}, [user]);
+	useEffect(() => {
+    async function fetchAssignments() {
+        if (user?.email) {
+            console.log("Making API request for user email:", user.email);
+            try {
+                const response = await axios.get(
+                    `http://localhost:7000/submit-assignment?email=${user.email}`,
+                    { withCredentials: true }
+                );
+                console.log("Received data:", response.data);
+                setAssignments(response.data);
+                setLoading(false);
+            } catch (err) {
+                console.error(
+                    "Error fetching assignments:",
+                    err.response?.data || err
+                    
+                );
+                setLoading(false)
+            }
+        } else {
+            console.error("User email is undefined.");
+            
+        }
+    }
+    fetchAssignments();
+}, [user]);
+
 
 	useEffect(() => {
 		try {
@@ -28,26 +45,22 @@ const MyAssignments = () => {
 					(assignmentItem) => assignmentItem.email === user.email
 				);
 				setAssignment(filteredAssignment);
-                
 			}
 		} catch (err) {
 			console.log("Failed to load campaigns. Please try again later.");
-		} 
+		}
 	}, [assignments, user]);
 	if (loading) {
 		return <Loading></Loading>;
-	}
-
-	else if (!user)
+	} else if (!user)
 		return (
 			<div className="min-h-screen flex justify-center items-center">
 				Please log in to view your assignments.
 			</div>
 		);
-
 	else if (assignments.length === 0) {
 		return (
-			<div className="text-center mt-10">No assignments submitted yet.</div>
+			<div className="text-center min-h-screen flex justify-center items-center">No assignments submitted yet.</div>
 		);
 	}
 
@@ -56,7 +69,7 @@ const MyAssignments = () => {
 			<h1 className="text-2xl font-bold mb-5">My Submitted Assignments</h1>
 			<table className="w-full border-collapse border border-gray-300">
 				<thead>
-					<tr className="bg-gray-100">
+					<tr className="bg-gray-100 dark:bg-transparent">
 						<th className="border border-gray-300 p-2">Title</th>
 						<th className="border border-gray-300 p-2">Status</th>
 						<th className="border border-gray-300 p-2">Total Marks</th>
@@ -66,7 +79,7 @@ const MyAssignments = () => {
 				</thead>
 				<tbody>
 					{assignment.map((assignment) => (
-						<tr key={assignment.id}>
+						<tr key={assignment._id}>
 							<td className="border border-gray-300 p-2">{assignment.title}</td>
 							<td className="border border-gray-300 p-2 capitalize">
 								{assignment.status}

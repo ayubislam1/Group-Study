@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link } from "react-router";
 import { Button } from "../components/ui/button";
 import useAuth from "../hooks/useAuth";
 import Loading from "../components/ui/Loading";
+import { toast, ToastContainer } from "react-toastify";
 
 const GiveMark = () => {
 	const [assignment, setAssignment] = useState(null);
@@ -44,21 +45,21 @@ const GiveMark = () => {
 				email: user.email,
 			});
 
-			alert("Assignment marked successfully!");
+			toast.success("Assignment marked successfully!");
 			navigate("/pending_assignments");
 		} catch (error) {
 			alert("Error marking the assignment.");
 		}
 	};
-	// if (assignment?.email === user.email) {
-	//     return <div className="min-h-screen flex justify-center items-center">You cannot mark your own assignment.</div>
-	//   }
+	if (assignment?.email === user.email) {
+	    return <div className="min-h-screen flex justify-center items-center">You cannot mark your own assignment.</div>
+	  }
 	if (!assignment) return <Loading></Loading>;
 
 	return (
 		<div className="container mx-auto p-5">
 			<h1 className="text-2xl font-bold mb-5">Mark Assignment</h1>
-			<div className="flex justify-between items-center">
+			<div className="flex justify-between md:items-center gap-1 md:gap-0">
 				<div>
 					<p>
 						<strong>Title:</strong> {assignment.title}
@@ -74,12 +75,11 @@ const GiveMark = () => {
 							Open Document
 						</Link>
 					</p>
-                    <p>
+					<p>
 						<strong>Note:</strong> {assignment.note}
 					</p>
 				</div>
 				<div>
-					
 					<p>
 						<strong>TotalMark:</strong> {assignment.marks}
 					</p>
@@ -97,7 +97,7 @@ const GiveMark = () => {
 					type="number"
 					value={ObtainMarks}
 					onChange={(e) => setMarks(e.target.value)}
-					className="w-full p-2 border rounded"
+					className="w-full p-2 border rounded  dark:text-black"
 				/>
 			</div>
 			<div className="mt-5">
@@ -107,7 +107,7 @@ const GiveMark = () => {
 				<textarea
 					value={feedback}
 					onChange={(e) => setFeedback(e.target.value)}
-					className="w-full p-2 border rounded"
+					className="w-full p-2 border rounded dark:text-black"
 				></textarea>
 			</div>
 			<div className="mt-5 flex justify-end">
@@ -118,6 +118,7 @@ const GiveMark = () => {
 					Submit
 				</Button>
 			</div>
+			<ToastContainer></ToastContainer>
 		</div>
 	);
 };

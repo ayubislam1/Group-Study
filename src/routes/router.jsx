@@ -11,6 +11,7 @@ import MyAssignment from "../pages/MyAssignment";
 import UpdateAssignment from "../pages/UpdateAssignment";
 import AssignmentDetail from "../pages/AssignmentDetailes";
 import GiveMark from "../pages/GiveMark";
+import PrivateRouter from "./PrivateRouter";
 
 const router = createBrowserRouter([
 	{
@@ -36,15 +37,15 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/pending_assignments",
-				element: <PendingAssignments></PendingAssignments>,
+				element: <PrivateRouter><PendingAssignments></PendingAssignments></PrivateRouter>,
 			},
 			{
 				path: "/create_assignments",
-				element: <CreateAssignment></CreateAssignment>,
+				element: <PrivateRouter><CreateAssignment></CreateAssignment></PrivateRouter>,
 			},
 			{
 				path: "/my_assignments",
-				element: <MyAssignment></MyAssignment>,
+				element:<PrivateRouter> <MyAssignment></MyAssignment></PrivateRouter>,
 			},
 			{
 				path: `/update-assignment/:id`,
@@ -55,9 +56,9 @@ const router = createBrowserRouter([
 				element: <AssignmentDetail></AssignmentDetail>,
 			},
 			{
-				path:"/give-mark/:id",
-				element:<GiveMark></GiveMark>
-			}
+				path: "/give-mark/:id",
+				element: <GiveMark></GiveMark>,
+			},
 		],
 	},
 ]);

@@ -150,6 +150,7 @@ export default function Register() {
 									type={showPassword ? "text" : "password"}
 									name="pass"
 									required
+                                     
 								/>
 								<span
 									onClick={() => setShowPassword(!showPassword)}

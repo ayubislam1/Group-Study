@@ -11,7 +11,7 @@ import {
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../services/firebaseConfig";
 import { GithubAuthProvider } from "firebase/auth";
-
+import axios from "axios";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const ThemeContext = createContext(null);
@@ -20,7 +20,7 @@ export const ThemeContext = createContext(null);
 const ContextProvider = ({ children }) => {
 	const [user, setUsers] = useState(null);
 	const [loader, setLoader] = useState(true);
-	
+
 	const googleProvider = () => {
 		const provider = new GoogleAuthProvider();
 		return signInWithPopup(auth, provider);
@@ -41,6 +41,25 @@ const ContextProvider = ({ children }) => {
 	useEffect(() => {
 		const useSub = onAuthStateChanged(auth, (currentUser) => {
 			setUsers(currentUser);
+
+			if (currentUser?.email) {
+				const user = { email: currentUser.email };
+				axios
+					.post("http://localhost:7000/jwt", user, {
+						withCredentials: true,
+					})
+					.then((res) => {
+						setLoader(false);
+						console.log(res.data);
+					});
+			} else {
+				axios
+					.post("http://localhost:7000/logout", {}, { withCredentials: true })
+					.then((res) => {
+						setLoader(false);
+						console.log(res.data);
+					});
+			}
 		});
 
 		return () => {

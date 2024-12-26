@@ -4,6 +4,7 @@ import {  useParams } from "react-router";
 import { Button } from "../components/ui/button";
 import useAuth from "../hooks/useAuth";
 import Loading from "../components/ui/Loading";
+import { toast,ToastContainer} from "react-toastify";
 
 const AssignmentDetail = () => {
 	const [assignment, setAssignment] = useState("");
@@ -46,7 +47,7 @@ const AssignmentDetail = () => {
 				name,
                 dueDate
 			});
-			alert("Assignment submitted successfully!");
+			toast.success("Assignment submitted successfully!");
 			setModalOpen(false);
 			setGoogleDocsLink("");
 			setNote("");
@@ -78,19 +79,19 @@ const AssignmentDetail = () => {
 			{modalOpen && (
 				<div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
 					<div className="bg-white p-5 rounded-md shadow-lg w-96">
-						<h2 className="text-xl mb-3">Submit Your Assignment</h2>
+						<h2 className="text-xl mb-3 dark:text-black">Submit Your Assignment</h2>
 						<input
 							type="text"
 							placeholder="Google Docs Link"
 							value={googleDocsLink}
 							onChange={(e) => setGoogleDocsLink(e.target.value)}
-							className="w-full p-2 border rounded-md mb-3"
+							className="w-full p-2 border rounded-md mb-3 dark:text-black"
 						/>
 						<textarea
 							placeholder="Quick Note"
 							value={note}
 							onChange={(e) => setNote(e.target.value)}
-							className="w-full p-2 border rounded-md mb-3"
+							className="w-full p-2 border rounded-md mb-3 dark:text-black"
 						/>
 						<div className="flex justify-end gap-3">
 							<Button onClick={() => setModalOpen(false)} variant="outline">
@@ -103,6 +104,7 @@ const AssignmentDetail = () => {
 					</div>
 				</div>
 			)}
+            <ToastContainer></ToastContainer>
 		</div>
 	);
 };
