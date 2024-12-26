@@ -31,10 +31,7 @@ This project was built as part of a job assessment for **BJET Inc.** and showcas
 
 ### Pages
 
-#### Home Page (Public)
-- **Banner Section:** Attractive and theme-aligned banner.
-- **Feature Section:** Highlights key features of the application.
-- **FAQ Section:** Answers common questions about the platform.
+
 
 #### Assignments Page (Public)
 - Displays all assignments with thumbnails, titles, marks, and difficulty levels.
@@ -104,10 +101,3 @@ This project was built as part of a job assessment for **BJET Inc.** and showcas
 - **MongoDB:** Database for storing user and assignment data.
 - **JWT:** For secure user authentication and authorization.
 
-## How to Run Locally
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/yourusername/online-group-study.git
-   cd online-group-study

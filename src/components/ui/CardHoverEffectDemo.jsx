@@ -4,18 +4,19 @@ import { HoverEffect } from "./HoverEffect";
 
 export function CardHoverEffectDemo() {
 	return (
-		<section className="py-16">
-			<div className="max-w-5xl mx-auto px-8 text-center">
-				<h2 className="text-4xl font-bold text-primary dark:text-white mb-6">
-					Explore Our Latest Crowdfunding Campaigns
-				</h2>
-				<p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
-					Discover innovative ideas and contribute to campaigns that inspire
-					change. Join us in supporting visionary projects that matter.
-				</p>
-				<HoverEffect items={campaigns} />
-			</div>
-		</section>
+        <section className="py-16">
+        <div className="max-w-5xl mx-auto px-8 text-center">
+          <h2 className="text-4xl font-bold text-primary dark:text-white mb-6">
+            Explore Our Latest Job Assignments
+          </h2>
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
+            Discover exciting opportunities to work on challenging assignments and showcase your skills. 
+            Join us to collaborate and achieve success in your online job journey.
+          </p>
+          <HoverEffect items={campaigns} />
+        </div>
+      </section>
+      
 	);
 }
 
