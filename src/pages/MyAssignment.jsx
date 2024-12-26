@@ -10,33 +10,30 @@ const MyAssignments = () => {
 	const { user } = useAuth();
 
 	useEffect(() => {
-    async function fetchAssignments() {
-        if (user?.email) {
-            console.log("Making API request for user email:", user.email);
-            try {
-                const response = await axios.get(
-                    `http://localhost:7000/submit-assignment?email=${user.email}`,
-                    { withCredentials: true }
-                );
-                console.log("Received data:", response.data);
-                setAssignments(response.data);
-                setLoading(false);
-            } catch (err) {
-                console.error(
-                    "Error fetching assignments:",
-                    err.response?.data || err
-                    
-                );
-                setLoading(false)
-            }
-        } else {
-            console.error("User email is undefined.");
-            
-        }
-    }
-    fetchAssignments();
-}, [user]);
+		async function fetchAssignments() {
+			if (user?.email) {
+				console.log("Making API request for user email:", user.email);
+				try {
+					const response = await axios.get(
+						`https://assignment-11-backend-theta.vercel.app/submit-assignment?email=${user.email}`,
+						{ withCredentials: true }
+					);
 
+					setAssignments(response.data);
+					setLoading(false);
+				} catch (err) {
+					console.error(
+						"Error fetching assignments:",
+						err.response?.data || err
+					);
+					setLoading(false);
+				}
+			} else {
+				console.error("User email is undefined.");
+			}
+		}
+		fetchAssignments();
+	}, [user]);
 
 	useEffect(() => {
 		try {
@@ -60,7 +57,9 @@ const MyAssignments = () => {
 		);
 	else if (assignments.length === 0) {
 		return (
-			<div className="text-center min-h-screen flex justify-center items-center">No assignments submitted yet.</div>
+			<div className="text-center min-h-screen flex justify-center items-center">
+				No assignments submitted yet.
+			</div>
 		);
 	}
 

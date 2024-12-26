@@ -26,7 +26,9 @@ const Assignments = () => {
 	const fetchAssignments = async () => {
 		setLoader(true);
 		try {
-			const res = await fetch("http://localhost:7000/assignments");
+			const res = await fetch(
+				"https://assignment-11-backend-theta.vercel.app/assignments"
+			);
 			if (!res.ok) throw new Error("Failed to fetch assignments.");
 			const data = await res.json();
 			setAssignments(data);
@@ -76,12 +78,15 @@ const Assignments = () => {
 		}
 
 		try {
-			const res = await fetch(`http://localhost:7000/assignments/${id}`, {
-				method: "DELETE",
-				headers: {
-					"Content-type": "application/json",
-				},
-			});
+			const res = await fetch(
+				`https://assignment-11-backend-theta.vercel.app/assignments/${id}`,
+				{
+					method: "DELETE",
+					headers: {
+						"Content-type": "application/json",
+					},
+				}
+			);
 
 			if (!res.ok) throw new Error("Failed to delete assignment.");
 
@@ -141,15 +146,15 @@ const Assignments = () => {
 							<p>Marks: {assignment.marks}</p>
 							<p>Difficulty: {assignment.difficulty}</p>
 							<div className="flex justify-end space-x-2 mt-4">
-							<div className="justify-start">
-                            <Button
-									onClick={() => handleViewAssignment(assignment._id)}
-									variant="outline"
-									className="text-blue-600 hover:bg-blue-100 dark:hover:bg-slate-400 "
-								>
-									View Assignment
-								</Button>
-                            </div>
+								<div className="justify-start">
+									<Button
+										onClick={() => handleViewAssignment(assignment._id)}
+										variant="outline"
+										className="text-blue-600 hover:bg-blue-100 dark:hover:bg-slate-400 "
+									>
+										View Assignment
+									</Button>
+								</div>
 								{user?.email === assignment.email && (
 									<>
 										<Button

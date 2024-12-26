@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {  useParams } from "react-router";
+import { useParams } from "react-router";
 import { Button } from "../components/ui/button";
 import useAuth from "../hooks/useAuth";
 import Loading from "../components/ui/Loading";
-import { toast,ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const AssignmentDetail = () => {
 	const [assignment, setAssignment] = useState("");
@@ -13,10 +13,10 @@ const AssignmentDetail = () => {
 	const [note, setNote] = useState("");
 	const { id } = useParams();
 	const { user } = useAuth();
-	
+
 	useEffect(() => {
 		axios
-			.get(`http://localhost:7000/assignments/${id}`)
+			.get(`https://assignment-11-backend-theta.vercel.app/assignments/${id}`)
 			.then((response) => {
 				setAssignment(response.data);
 			})
@@ -25,8 +25,8 @@ const AssignmentDetail = () => {
 			);
 	}, [id]);
 
-	const { marks, description, image, title, name,dueDate } = assignment;
-	console.log(assignment);
+	const { marks, description, image, title, name, dueDate } = assignment;
+
 	const handleSubmit = async () => {
 		if (!googleDocsLink.trim()) {
 			alert("Google Docs link is required.");
@@ -34,19 +34,22 @@ const AssignmentDetail = () => {
 		}
 
 		try {
-			await axios.post(`http://localhost:7000/submit-assignment`, {
-				assignmentId: id,
-				googleDocsLink,
-				note,
-				email: user.email,
-				status: "pending",
-				marks,
-				description,
-				image,
-				title,
-				name,
-                dueDate
-			});
+			await axios.post(
+				`https://assignment-11-backend-theta.vercel.app/submit-assignment`,
+				{
+					assignmentId: id,
+					googleDocsLink,
+					note,
+					email: user.email,
+					status: "pending",
+					marks,
+					description,
+					image,
+					title,
+					name,
+					dueDate,
+				}
+			);
 			toast.success("Assignment submitted successfully!");
 			setModalOpen(false);
 			setGoogleDocsLink("");
@@ -54,11 +57,10 @@ const AssignmentDetail = () => {
 		} catch (error) {
 			alert("After log in you can submit");
 			n;
-           
 		}
 	};
 
-	if (!assignment) return <Loading></Loading> ;
+	if (!assignment) return <Loading></Loading>;
 
 	return (
 		<div className="container mx-auto p-5">
@@ -79,7 +81,9 @@ const AssignmentDetail = () => {
 			{modalOpen && (
 				<div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
 					<div className="bg-white p-5 rounded-md shadow-lg w-96">
-						<h2 className="text-xl mb-3 dark:text-black">Submit Your Assignment</h2>
+						<h2 className="text-xl mb-3 dark:text-black">
+							Submit Your Assignment
+						</h2>
 						<input
 							type="text"
 							placeholder="Google Docs Link"
@@ -104,7 +108,7 @@ const AssignmentDetail = () => {
 					</div>
 				</div>
 			)}
-            <ToastContainer></ToastContainer>
+			<ToastContainer></ToastContainer>
 		</div>
 	);
 };

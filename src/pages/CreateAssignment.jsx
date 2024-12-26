@@ -19,23 +19,23 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 
 const CreateAssignmentPage = () => {
-	const [title, setTitle] = useState(""); 
+	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [marks, setMarks] = useState("");
 	const [image, setImage] = useState("");
-	const [difficulty, setDifficulty] = useState(""); 
-	const [dueDate, setDueDate] = useState(null); 
-	const [name, setName] = useState(""); 
-	const [email, setEmail] = useState(""); 
+	const [difficulty, setDifficulty] = useState("");
+	const [dueDate, setDueDate] = useState(null);
+	const [name, setName] = useState("");
+	const [email, setEmail] = useState("");
 	const [successMessage, setSuccessMessage] = useState("");
 	const { user } = useAuth();
 
-    useEffect(() => {
-        if (user) {
-          setName(user.displayName );
-          setEmail(user.email );
-        }
-      }, [user]); 
+	useEffect(() => {
+		if (user) {
+			setName(user.displayName);
+			setEmail(user.email);
+		}
+	}, [user]);
 	const handleCreateAssignment = async (e) => {
 		e.preventDefault();
 
@@ -52,42 +52,43 @@ const CreateAssignmentPage = () => {
 			alert("Please fill out all fields.");
 			return;
 		}
-        const formattedDueDate = dueDate ? dueDate.toISOString().split('T')[0] : null;
+		const formattedDueDate = dueDate
+			? dueDate.toISOString().split("T")[0]
+			: null;
 		const assignment = {
 			title,
 			description,
 			marks,
 			image,
 			difficulty,
-			dueDate:formattedDueDate,
+			dueDate: formattedDueDate,
 			name,
 			email,
 		};
 
 		try {
-			const response = await axios.post("http://localhost:7000/assignments", assignment, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-            
-			}
-            
-        );
+			const response = await axios.post(
+				"https://assignment-11-backend-theta.vercel.app/assignments",
+				assignment,
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
 
-			
 			if (response.status === 200) {
 				setSuccessMessage("Assignment created successfully!");
 				setTimeout(() => setSuccessMessage(""), 3000);
 
-		
 				setTitle("");
 				setDescription("");
 				setMarks("");
 				setImage("");
 				setDifficulty("");
 				setDueDate(null);
-				setName(""); 
-				setEmail(""); 
+				setName("");
+				setEmail("");
 			}
 		} catch (error) {
 			console.error("Error creating assignment:", error);

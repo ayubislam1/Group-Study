@@ -46,7 +46,7 @@ export default function Register() {
 
 		createUser(email, pass)
 			.then(() => {
-				fetch("http://localhost:7000/users",{
+				fetch("https://assignment-11-backend-theta.vercel.app/users", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -150,7 +150,6 @@ export default function Register() {
 									type={showPassword ? "text" : "password"}
 									name="pass"
 									required
-                                     
 								/>
 								<span
 									onClick={() => setShowPassword(!showPassword)}

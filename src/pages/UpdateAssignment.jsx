@@ -10,7 +10,7 @@ import { WarningProvider } from "@radix-ui/react-dialog";
 
 const UpdateAssignment = () => {
 	const { id } = useParams();
-	console.log("ID from URL:", id);
+
 	const [assignment, setAssignment] = useState(null);
 	const [errorSms, setError] = useState("");
 	const navigate = useNavigate();
@@ -22,7 +22,7 @@ const UpdateAssignment = () => {
 		}
 
 		// Fetch the assignment data
-		fetch(`http://localhost:7000/assignments/${id}`)
+		fetch(`https://assignment-11-backend-theta.vercel.app/assignments/${id}`)
 			.then((res) => {
 				if (!res.ok) {
 					throw new Error(`Error fetching assignment with ID: ${id}`);
@@ -43,7 +43,7 @@ const UpdateAssignment = () => {
 			setError("Please fill out all fields.");
 			return;
 		}
-        setError("")
+		setError("");
 		// Marks validation (must be a number and greater than 0)
 		if (isNaN(assignment.marks) || assignment.marks <= 0) {
 			alert("Please enter a valid number for marks.");
@@ -64,11 +64,9 @@ const UpdateAssignment = () => {
 			image: assignment.image.trim(),
 		};
 
-		console.log("Payload:", updatedData);
-
 		try {
 			const response = await axios.put(
-				`http://localhost:7000/assignments/${id}`,
+				`https://assignment-11-backend-theta.vercel.app/assignments/${id}`,
 				updatedData,
 				{
 					headers: { "Content-Type": "application/json" },
@@ -89,7 +87,6 @@ const UpdateAssignment = () => {
 	};
 
 	if (!assignment) return <Loading />;
-    
 
 	return (
 		<div className="container mx-auto p-4">
@@ -120,7 +117,7 @@ const UpdateAssignment = () => {
 					>
 						Marks
 					</label>
-                    
+
 					<Input
 						id="marks"
 						value={assignment.marks}
@@ -130,7 +127,6 @@ const UpdateAssignment = () => {
 						type="number"
 						className="mt-1"
 					/>
-                    
 				</div>
 
 				<div className="mb-4">

@@ -20,7 +20,9 @@ const GiveMark = () => {
 			return;
 		}
 
-		fetch(`http://localhost:7000/submit-assignment/${id}`)
+		fetch(
+			`https://assignment-11-backend-theta.vercel.app/submit-assignment/${id}`
+		)
 			.then((res) => {
 				if (!res.ok) {
 					throw new Error(`Error fetching assignment with ID: ${id}`);
@@ -38,12 +40,15 @@ const GiveMark = () => {
 				return;
 			}
 
-			await axios.put(`http://localhost:7000/submit-assignment/${id}`, {
-				assignmentId: id,
-				ObtainMarks,
-				feedback,
-				email: user.email,
-			});
+			await axios.put(
+				`https://assignment-11-backend-theta.vercel.app/submit-assignment/${id}`,
+				{
+					assignmentId: id,
+					ObtainMarks,
+					feedback,
+					email: user.email,
+				}
+			);
 
 			toast.success("Assignment marked successfully!");
 			navigate("/pending_assignments");
@@ -52,8 +57,12 @@ const GiveMark = () => {
 		}
 	};
 	if (assignment?.email === user.email) {
-	    return <div className="min-h-screen flex justify-center items-center">You cannot mark your own assignment.</div>
-	  }
+		return (
+			<div className="min-h-screen flex justify-center items-center">
+				You cannot mark your own assignment.
+			</div>
+		);
+	}
 	if (!assignment) return <Loading></Loading>;
 
 	return (

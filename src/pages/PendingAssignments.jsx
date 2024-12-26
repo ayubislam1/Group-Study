@@ -13,7 +13,9 @@ const PendingAssignments = () => {
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:7000/submit-assignment", { withCredentials: true })
+			.get("https://assignment-11-backend-theta.vercel.app/submit-assignment", {
+				withCredentials: true,
+			})
 			.then((response) => {
 				setPendingAssignments(
 					response.data.filter(
@@ -42,7 +44,6 @@ const PendingAssignments = () => {
 			</div>
 		);
 	}
-
 
 	return (
 		<div className="container mx-auto p-5">
