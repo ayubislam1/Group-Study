@@ -37,7 +37,7 @@ export default function Footer() {
           </div>
           <div className="space-y-2 sm:col-span-2 md:col-span-1">
             <h4 className="text-lg font-medium">About</h4>
-            <p className="text-sm text-muted-foreground">Job.</p>
+            <p className="text-sm text-muted-foreground">Online-Study .</p>
           </div>
           <div className="space-y-2 sm:col-span-2 md:col-span-1">
             <h4 className="text-lg font-medium">Contact</h4>

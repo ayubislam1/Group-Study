@@ -20,28 +20,30 @@ const Assignments = () => {
 	const [filterDifficulty, setFilterDifficulty] = useState("");
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 	const [selectedAssignment, setSelectedAssignment] = useState(null);
+	const [search, setSearch] = useState("");
 	const [loading, setLoader] = useState(false);
 	const { user } = useAuth();
 	const navigate = useNavigate();
-	const fetchAssignments = async () => {
-		setLoader(true);
-		try {
-			const res = await fetch(
-				"https://assignment-11-backend-theta.vercel.app/assignments"
-			);
-			if (!res.ok) throw new Error("Failed to fetch assignments.");
-			const data = await res.json();
-			setAssignments(data);
-			setFilteredAssignments(data);
-		} catch (error) {
-			toast.error("Error fetching assignments.");
-		} finally {
-			setLoader(false);
-		}
-	};
+
 	useEffect(() => {
+		const fetchAssignments = async () => {
+			setLoader(true);
+			try {
+				const res = await fetch(
+					`http://localhost:7000/assignments?search=${search}`
+				);
+				// if (!res.ok) throw new Error("Failed to fetch assignments.");
+				const data = await res.json();
+				setAssignments(data);
+				setFilteredAssignments(data);
+			} catch (error) {
+				toast.error("Error fetching assignments.");
+			} finally {
+				setLoader(false);
+			}
+		};
 		fetchAssignments();
-	}, []);
+	}, [search]);
 
 	useEffect(() => {
 		let filtered = assignments;
@@ -103,9 +105,9 @@ const Assignments = () => {
 
 	const handleViewAssignment = (id) => navigate(`/assignments/${id}`);
 	const handleUpdateAssignment = (id) => navigate(`/update-assignment/${id}`);
-	if (loading) {
-		return <Loading></Loading>;
-	}
+	// if (loading) {
+	// 	return <Loading></Loading>;
+	// }
 	return (
 		<div className="container mx-auto p-4 dark:bg-transparent">
 			<h1 className="text-3xl font-bold mb-8">Assignments</h1>
@@ -128,61 +130,72 @@ const Assignments = () => {
 					<option value="Medium">Medium</option>
 					<option value="Hard">Hard</option>
 				</select>
+				<input
+					type="text"
+					placeholder="search"
+					className="input border rounded p-2 text-black"
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
+				/>
 			</div>
 
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-				{filteredAssignments.length > 0 ? (
-					filteredAssignments.map((assignment) => (
-						<div
-							key={assignment._id}
-							className="bg-white dark:bg-transparent dark:border rounded-lg shadow-lg p-4"
-						>
-							<img
-								src={assignment.image}
-								alt={assignment.title}
-								className="w-full h-32 object-fit mb-4 rounded"
-							/>
-							<h2 className="text-xl font-semibold">{assignment.title}</h2>
-							<p>Marks: {assignment.marks}</p>
-							<p>Difficulty: {assignment.difficulty}</p>
-							<div className="flex justify-end space-x-2 mt-4">
-								<div className="justify-start">
+			{loading ? (
+				<Loading></Loading>
+			) : (
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+					{filteredAssignments.length > 0 ? (
+						filteredAssignments.map((assignment) => (
+							<div
+								key={assignment._id}
+								className="bg-white dark:bg-transparent dark:border rounded-lg shadow-lg p-4"
+							>
+								<img
+									src={assignment.image}
+									alt={assignment.title}
+									className="w-full h-32 object-fit mb-4 rounded"
+								/>
+								<h2 className="text-xl font-semibold">{assignment.title}</h2>
+								<p>Marks: {assignment.marks}</p>
+								<p>Difficulty: {assignment.difficulty}</p>
+								<div className="flex justify-end space-x-2 mt-4">
+									<div className="justify-start">
+										<Button
+											onClick={() => handleViewAssignment(assignment._id)}
+											variant="outline"
+											className="text-blue-600 hover:bg-blue-100 dark:hover:bg-slate-400 "
+										>
+											View Assignment
+										</Button>
+									</div>
 									<Button
-										onClick={() => handleViewAssignment(assignment._id)}
+										onClick={() => handleUpdateAssignment(assignment._id)}
 										variant="outline"
-										className="text-blue-600 hover:bg-blue-100 dark:hover:bg-slate-400 "
+										className="text-green-600 hover:bg-green-100 dark:hover:bg-slate-400"
 									>
-										View Assignment
+										Update
 									</Button>
+									{user?.email === assignment.email && (
+										<>
+											<Button
+												onClick={() => {
+													setSelectedAssignment(assignment._id);
+													setShowDeleteDialog(true);
+												}}
+												variant="outline"
+												className="text-red-600 hover:bg-red-100 dark:hover:bg-slate-400"
+											>
+												Delete
+											</Button>
+										</>
+									)}
 								</div>
-								{user?.email === assignment.email && (
-									<>
-										<Button
-											onClick={() => handleUpdateAssignment(assignment._id)}
-											variant="outline"
-											className="text-green-600 hover:bg-green-100 dark:hover:bg-slate-400"
-										>
-											Update
-										</Button>
-										<Button
-											onClick={() => {
-												setSelectedAssignment(assignment._id);
-												setShowDeleteDialog(true);
-											}}
-											variant="outline"
-											className="text-red-600 hover:bg-red-100 dark:hover:bg-slate-400"
-										>
-											Delete
-										</Button>
-									</>
-								)}
 							</div>
-						</div>
-					))
-				) : (
-					<p className="text-gray-500">No assignments found.</p>
-				)}
-			</div>
+						))
+					) : (
+						<p className="text-gray-500">No assignments found.</p>
+					)}
+				</div>
+			)}
 
 			<Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
 				<DialogContent>

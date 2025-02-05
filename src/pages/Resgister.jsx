@@ -1,5 +1,7 @@
 import { useState, useContext } from "react";
 import Swal from "sweetalert2";
+import Lottie from "lottie-react";
+import registerAnimation from "../assets/Register.json"
 import {
 	Card,
 	CardHeader,
@@ -203,11 +205,10 @@ export default function Register() {
 					</form>
 				</CardContent>
 			</div>
-			<img
-				src="https://img.lovepik.com/photo/45009/7677.jpg_wh860.jpg"
-				alt="Sign Up Illustration"
-				className="max-w-full w-full md:w-1/2 object-contain p-5"
-			/>
+			<div className="max-w-full w-full md:w-1/2 object-contain p-5 ">
+		<Lottie animationData={registerAnimation}></Lottie>
+			</div>
 		</Card>
 	);
 }
+// 

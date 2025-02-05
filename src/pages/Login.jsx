@@ -13,6 +13,8 @@ import { Link, useNavigate } from "react-router";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../context/ContextProvider";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import Lottie from "lottie-react";
+import logInAnimation from "../assets/login.json"
 
 export default function Login() {
 	const navigate = useNavigate();
@@ -154,12 +156,9 @@ export default function Login() {
 			</div>
 
 			<div className="w-full md:w-1/2 flex justify-center items-center">
-				<img
-					src="https://cdni.iconscout.com/illustration/premium/thumb/online-registration-illustration-download-in-svg-png-gif-file-formats--create-account-sign-up-login-user-interface-pack-network-communication-illustrations-6381808.png"
-					alt="Login Illustration"
-					className="max-w-xs md:max-w-sm lg:max-w-full"
-				/>
+				<Lottie animationData={logInAnimation}></Lottie>
 			</div>
 		</Card>
 	);
 }
+// className="max-w-xs md:max-w-sm lg:max-w-full"

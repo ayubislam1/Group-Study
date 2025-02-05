@@ -22,7 +22,7 @@ const AssignmentDetail = () => {
 			})
 			.catch((err) =>
 				console.error("Error fetching assignment details: ", err)
-			);
+			)
 	}, [id]);
 
 	const { marks, description, image, title, name, dueDate } = assignment;
@@ -56,7 +56,7 @@ const AssignmentDetail = () => {
 			setNote("");
 		} catch (error) {
 			alert("After log in you can submit");
-			n;
+			
 		}
 	};
 
@@ -71,7 +71,7 @@ const AssignmentDetail = () => {
 			<img
 				src={assignment.image}
 				alt={assignment.title}
-				className="w-full h-60 object-cover rounded-md mt-5"
+				className="w-full h-60 object-fit rounded-md mt-5"
 			/>
 
 			<Button onClick={() => setModalOpen(true)} className="mt-5">

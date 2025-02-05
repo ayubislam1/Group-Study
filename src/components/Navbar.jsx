@@ -43,7 +43,7 @@ export default function Navbar() {
 				</SheetTrigger>
 				<SheetContent side="left">
 					<Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-						<span className="text-2xl font-bold">JoB</span>
+						<span className="text-2xl font-bold text-blue-500">StudyDo</span>
 					</Link>
 					<div className="grid gap-2 py-6">
 						<Link
@@ -94,7 +94,8 @@ export default function Navbar() {
 			</Sheet>
 
 			<Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-				<span className="text-2xl">JoB</span>
+			<img src="https://media.istockphoto.com/id/1197901679/vector/open-book-color-vector-template-icon.jpg?s=612x612&w=0&k=20&c=XdFcmrOHtGYGH7ab4YplsEpPzaLS4WUeeO6Nr6aaols=" className="w-10 h-10 mr-1" alt="" />
+				<span className="text-3xl text-blue-500 font-semibold"><i>StudyDo</i></span>
 			</Link>
 
 			<nav className="ml-auto hidden lg:flex gap-6">
@@ -149,7 +150,7 @@ export default function Navbar() {
 								className="h-10 w-10 rounded-full"
 							/>
 							{showDisplayName && (
-								<span className="absolute top-full mt-1 bg-gray-100 text-gray-900 text-base py-1 px-2 rounded-md shadow-md">
+								<span className="absolute w-24 top-full mt-1 bg-blue-400 text-white-900 text-base py-1 px-2 rounded-b-md rounded-tr-md shadow-md z-10">
 									{user.displayName}
 								</span>
 							)}

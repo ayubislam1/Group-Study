@@ -3,7 +3,6 @@ import { ThemeContext } from "../context/ContextProvider";
 import { Navigate} from "react-router";
 import useAuth from "../hooks/useAuth";
 
-// eslint-disable-next-line react/prop-types
 const PrivateRouter = ({ children }) => {
 	
 
