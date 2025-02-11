@@ -11,7 +11,7 @@ export default function Navbar() {
 	const { user, signOutUser } = useContext(ThemeContext);
 	const [showDisplayName, setShowDisplayName] = useState(false);
 	const [dropdownOpen, setDropdownOpen] = useState(false);
-	
+
 	const handleEvent = () => {
 		signOutUser()
 			.then(() => {
@@ -23,17 +23,16 @@ export default function Navbar() {
 	};
 	useEffect(() => {
 		const handleClickOutside = (event) => {
-		  if (!event.target.closest(".relative")) {
-			setDropdownOpen(false);
-		  }
+			if (!event.target.closest(".relative")) {
+				setDropdownOpen(false);
+			}
 		};
 		document.addEventListener("click", handleClickOutside);
 		return () => document.removeEventListener("click", handleClickOutside);
-	  }, []);
-
+	}, []);
 
 	return (
-		<header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 border">
+		<header className="flex h-20 w-full  items-center px-4 md:px-6  border-b-2 sticky top-0 z-50 bg-white">
 			<Sheet>
 				<SheetTrigger asChild>
 					<Button variant="outline" size="icon" className="lg:hidden">
@@ -69,6 +68,14 @@ export default function Navbar() {
 								>
 									Pending Assignments
 								</Link>
+
+								<Link
+									className="flex w-full items-center py-2 text-lg font-semibold"
+									onClick={handleEvent}
+									prefetch={false}
+								>
+									Log out
+								</Link>
 							</>
 						)}
 						{!user && (
@@ -87,6 +94,7 @@ export default function Navbar() {
 								>
 									Register
 								</Link>
+								
 							</>
 						)}
 					</div>
@@ -94,8 +102,14 @@ export default function Navbar() {
 			</Sheet>
 
 			<Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-			<img src="https://media.istockphoto.com/id/1197901679/vector/open-book-color-vector-template-icon.jpg?s=612x612&w=0&k=20&c=XdFcmrOHtGYGH7ab4YplsEpPzaLS4WUeeO6Nr6aaols=" className="w-10 h-10 mr-1" alt="" />
-				<span className="text-3xl text-blue-500 font-semibold"><i>StudyDo</i></span>
+				<img
+					src="https://i.ibb.co.com/Dnd4tsv/istockphoto-1197901679-612x612-removebg-preview-1.png"
+					className="w-10 h-10 mr-1"
+					alt=""
+				/>
+				<span className="text-3xl text-blue-500 font-semibold">
+					<i>StudyDo</i>
+				</span>
 			</Link>
 
 			<nav className="ml-auto hidden lg:flex gap-6">
@@ -167,7 +181,7 @@ export default function Navbar() {
 									to="/my_assignments"
 									className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 								>
-									My  Assignments
+									My Assignments
 								</Link>
 								<div className="border-t my-2"></div>
 								<Button

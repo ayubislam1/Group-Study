@@ -16,7 +16,7 @@ const MyAssignments = () => {
 				console.log("Making API request for user email:", user.email);
 				try {
 					const response = await axios.get(
-						`https://assignment-11-backend-theta.vercel.app/submit-assignment?email=${user.email}&search=${search}`,
+						`http://localhost:7000/submit-assignment?email=${user.email}`,
 						{ withCredentials: true }
 					);
 
@@ -34,7 +34,7 @@ const MyAssignments = () => {
 			}
 		}
 		fetchAssignments();
-	}, [user,search]);
+	}, [user, ]);
 
 	useEffect(() => {
 		try {
@@ -66,7 +66,6 @@ const MyAssignments = () => {
 
 	return (
 		<div className="container mx-auto p-5 min-h-screen">
-				
 			<h1 className="text-2xl font-bold mb-5">My Submitted Assignments</h1>
 			<table className="w-full border-collapse border border-gray-300">
 				<thead>

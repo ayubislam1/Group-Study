@@ -68,7 +68,7 @@ const CreateAssignmentPage = () => {
 
 		try {
 			const response = await axios.post(
-				"https://assignment-11-backend-theta.vercel.app/assignments",
+				"http://localhost:7000/assignments",
 				assignment,
 				{
 					headers: {

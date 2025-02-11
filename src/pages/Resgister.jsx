@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import Swal from "sweetalert2";
 import Lottie from "lottie-react";
-import registerAnimation from "../assets/Register.json"
+import registerAnimation from "../assets/Register.json";
 import {
 	Card,
 	CardHeader,
@@ -48,7 +48,7 @@ export default function Register() {
 
 		createUser(email, pass)
 			.then(() => {
-				fetch("https://assignment-11-backend-theta.vercel.app/users", {
+				fetch("http://localhost:7000/users", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -57,6 +57,7 @@ export default function Register() {
 				})
 					.then((res) => res.json())
 					.then((data) => {
+					
 						if (data.insertedId) {
 							Swal.fire({
 								position: "top-center",
@@ -206,9 +207,9 @@ export default function Register() {
 				</CardContent>
 			</div>
 			<div className="max-w-full w-full md:w-1/2 object-contain p-5 ">
-		<Lottie animationData={registerAnimation}></Lottie>
+				<Lottie animationData={registerAnimation}></Lottie>
 			</div>
 		</Card>
 	);
 }
-// 
+//

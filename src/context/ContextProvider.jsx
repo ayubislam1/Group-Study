@@ -45,20 +45,17 @@ const ContextProvider = ({ children }) => {
 			if (currentUser?.email) {
 				const user = { email: currentUser.email };
 				axios
-					.post("https://assignment-11-backend-theta.vercel.app/jwt", user, {
+					.post("http://localhost:7000/jwt", user, {
 						withCredentials: true,
 					})
 					.then((res) => {
 						setLoader(false);
 						console.log(res.data);
-					});
+					})
+					.catch((err) => console.error(err));
 			} else {
 				axios
-					.post(
-						"https://assignment-11-backend-theta.vercel.app/logout",
-						{},
-						{ withCredentials: true }
-					)
+					.post("http://localhost:7000/logout", {}, { withCredentials: true })
 					.then((res) => {
 						setLoader(false);
 						console.log(res.data);

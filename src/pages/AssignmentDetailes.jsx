@@ -16,13 +16,13 @@ const AssignmentDetail = () => {
 
 	useEffect(() => {
 		axios
-			.get(`https://assignment-11-backend-theta.vercel.app/assignments/${id}`)
+			.get(`http://localhost:7000/assignments/${id}`)
 			.then((response) => {
 				setAssignment(response.data);
 			})
 			.catch((err) =>
 				console.error("Error fetching assignment details: ", err)
-			)
+			);
 	}, [id]);
 
 	const { marks, description, image, title, name, dueDate } = assignment;
@@ -34,29 +34,25 @@ const AssignmentDetail = () => {
 		}
 
 		try {
-			await axios.post(
-				`https://assignment-11-backend-theta.vercel.app/submit-assignment`,
-				{
-					assignmentId: id,
-					googleDocsLink,
-					note,
-					email: user.email,
-					status: "pending",
-					marks,
-					description,
-					image,
-					title,
-					name,
-					dueDate,
-				}
-			);
+			await axios.post(`http://localhost:7000/submit-assignment`, {
+				assignmentId: id,
+				googleDocsLink,
+				note,
+				email: user.email,
+				status: "pending",
+				marks,
+				description,
+				image,
+				title,
+				name,
+				dueDate,
+			});
 			toast.success("Assignment submitted successfully!");
 			setModalOpen(false);
 			setGoogleDocsLink("");
 			setNote("");
 		} catch (error) {
 			alert("After log in you can submit");
-			
 		}
 	};
 
