@@ -22,7 +22,7 @@ const UpdateAssignment = () => {
 		}
 
 		// Fetch the assignment data
-		fetch(`http://localhost:7000/assignments/${id}`)
+		fetch(`https://assignment-11-backend-theta.vercel.app/assignments/${id}`)
 			.then((res) => {
 				if (!res.ok) {
 					throw new Error(`Error fetching assignment with ID: ${id}`);
@@ -66,7 +66,7 @@ const UpdateAssignment = () => {
 
 		try {
 			const response = await axios.put(
-				`http://localhost:7000/assignments/${id}`,
+				`https://assignment-11-backend-theta.vercel.app/assignments/${id}`,
 				updatedData,
 				{
 					headers: { "Content-Type": "application/json" },

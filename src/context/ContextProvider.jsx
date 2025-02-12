@@ -45,7 +45,7 @@ const ContextProvider = ({ children }) => {
 			if (currentUser?.email) {
 				const user = { email: currentUser.email };
 				axios
-					.post("http://localhost:7000/jwt", user, {
+					.post("https://assignment-11-backend-theta.vercel.app/jwt", user, {
 						withCredentials: true,
 					})
 					.then((res) => {
@@ -55,7 +55,11 @@ const ContextProvider = ({ children }) => {
 					.catch((err) => console.error(err));
 			} else {
 				axios
-					.post("http://localhost:7000/logout", {}, { withCredentials: true })
+					.post(
+						"https://assignment-11-backend-theta.vercel.app/logout",
+						{},
+						{ withCredentials: true }
+					)
 					.then((res) => {
 						setLoader(false);
 						console.log(res.data);

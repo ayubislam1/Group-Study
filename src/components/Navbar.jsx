@@ -32,7 +32,7 @@ export default function Navbar() {
 	}, []);
 
 	return (
-		<header className="flex h-20 w-full  items-center px-4 md:px-6  border-b-2 sticky top-0 z-40 bg-white dark:bg-black">
+		<header className="flex h-20 w-full  items-center px-4 md:px-6  border-b-2 sticky top-0 z-40 bg-white dark:bg-primary-foreground">
 			<Sheet>
 				<SheetTrigger asChild>
 					<Button variant="outline" size="icon" className="lg:hidden">
@@ -68,6 +68,20 @@ export default function Navbar() {
 								>
 									Pending Assignments
 								</Link>
+								<Link
+									to={"/create_assignments"}
+									className="flex w-full items-center py-2 text-lg font-semibold"
+									prefetch={false}
+								>
+									Create Assignments
+								</Link>
+								<Link
+									to={"/my_assignments"}
+									className="flex w-full items-center py-2 text-lg font-semibold"
+									prefetch={false}
+								>
+									My Assignments
+								</Link>
 
 								<Link
 									className="flex w-full items-center py-2 text-lg font-semibold"
@@ -100,7 +114,11 @@ export default function Navbar() {
 				</SheetContent>
 			</Sheet>
 
-			<Link href="#" className="mr-6 lg:flex inline-flex ml-20 md:ml-0" prefetch={false}>
+			<Link
+				href="#"
+				className="mr-6 lg:flex inline-flex ml-20 md:ml-0"
+				prefetch={false}
+			>
 				<img
 					src="https://i.ibb.co.com/Dnd4tsv/istockphoto-1197901679-612x612-removebg-preview-1.png"
 					className="w-10 h-10 mr-1"
@@ -194,8 +212,11 @@ export default function Navbar() {
 						)}
 					</div>
 				)}
-				<ModeToggle />
 			</nav>
+			<div className="ml-10 md:ml-5">
+				{" "}
+				<ModeToggle />
+			</div>
 		</header>
 	);
 }

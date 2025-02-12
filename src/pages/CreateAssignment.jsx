@@ -17,59 +17,79 @@ import {
 import { format } from "date-fns";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateAssignmentPage = () => {
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [marks, setMarks] = useState("");
-	const [image, setImage] = useState("");
-	const [difficulty, setDifficulty] = useState("");
-	const [dueDate, setDueDate] = useState(null);
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
-	const [successMessage, setSuccessMessage] = useState("");
 	const { user } = useAuth();
 
+	// Form state
+	const [formData, setFormData] = useState({
+		title: "",
+		description: "",
+		marks: "",
+		image: "",
+		difficulty: "easy", // Default difficulty
+		dueDate: null,
+		name: "",
+		email: "",
+	});
+
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	// Set name and email from authenticated user
 	useEffect(() => {
 		if (user) {
-			setName(user.displayName);
-			setEmail(user.email);
+			setFormData((prevData) => ({
+				...prevData,
+				name: user.displayName || "",
+				email: user.email || "",
+			}));
 		}
 	}, [user]);
+
+	// Handle input changes
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setFormData((prevData) => ({ ...prevData, [name]: value }));
+	};
+
+	// Validate form fields
+	const validateForm = () => {
+		const requiredFields = [
+			"title",
+			"description",
+			"marks",
+			"image",
+			"dueDate",
+		];
+		for (const field of requiredFields) {
+			if (!formData[field]) {
+				toast.error(`Please fill out the ${field} field.`);
+				return false;
+			}
+		}
+		return true;
+	};
+
+	// Handle form submission
 	const handleCreateAssignment = async (e) => {
 		e.preventDefault();
+		setIsSubmitting(true);
 
-		if (
-			!title ||
-			!description ||
-			!marks ||
-			!image ||
-			!difficulty ||
-			!dueDate ||
-			!name ||
-			!email
-		) {
-			alert("Please fill out all fields.");
+		if (!validateForm()) {
+			setIsSubmitting(false);
 			return;
 		}
-		const formattedDueDate = dueDate
-			? dueDate.toISOString().split("T")[0]
+
+		const formattedDueDate = formData.dueDate
+			? format(formData.dueDate, "yyyy-MM-dd")
 			: null;
-		const assignment = {
-			title,
-			description,
-			marks,
-			image,
-			difficulty,
-			dueDate: formattedDueDate,
-			name,
-			email,
-		};
 
 		try {
 			const response = await axios.post(
-				"http://localhost:7000/assignments",
-				assignment,
+				"https://assignment-11-backend-theta.vercel.app/assignments",
+				{ ...formData, dueDate: formattedDueDate },
 				{
 					headers: {
 						"Content-Type": "application/json",
@@ -78,154 +98,204 @@ const CreateAssignmentPage = () => {
 			);
 
 			if (response.status === 200) {
-				setSuccessMessage("Assignment created successfully!");
-				setTimeout(() => setSuccessMessage(""), 3000);
+				toast.success("Assignment created successfully!");
 
-				setTitle("");
-				setDescription("");
-				setMarks("");
-				setImage("");
-				setDifficulty("");
-				setDueDate(null);
-				setName("");
-				setEmail("");
+				// Reset form
+				setFormData({
+					title: "",
+					description: "",
+					marks: "",
+					image: "",
+					difficulty: "easy",
+					dueDate: null,
+					name: user?.displayName || "",
+					email: user?.email || "",
+				});
 			}
 		} catch (error) {
 			console.error("Error creating assignment:", error);
-			alert("There was an error creating the assignment.");
+			toast.error("There was an error creating the assignment.");
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
 	return (
-		<div className="max-w-2xl mx-auto my-8 p-6 bg-transparent dark:bg-transparent dark:border dark:text-white rounded-lg shadow-md">
-			{/* Top Banner */}
-			<div className="bg-blue-500 text-white p-4 mb-6 rounded-lg shadow-md">
-				<h1 className="text-3xl font-bold text-center">
-					Create New Assignment
-				</h1>
-			</div>
-
-			{/* Form */}
-			<h1 className="text-2xl font-bold mb-6">Assignment Details</h1>
-
-			<form onSubmit={handleCreateAssignment}>
-				<div className="mb-4">
-					<label className="block text-sm font-medium mb-2">Name</label>
-					<Input
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-						placeholder="Enter your name"
-						required
-						className="bg-transparent dark:text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-					/>
+		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+			<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+				{/* Header */}
+				<div className="text-center mb-8">
+					<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+						Create New Assignment
+					</h1>
+					<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+						Fill out the form below to create a new assignment.
+					</p>
 				</div>
 
-				<div className="mb-4">
-					<label className="block text-sm font-medium mb-2">Email</label>
-					<Input
-						type="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						placeholder="Enter your email"
-						required
-						className="bg-transparent dark:text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-					/>
-				</div>
-
-				<div className="mb-4">
-					<label className="block text-sm font-medium mb-2">Title</label>
-					<Input
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						placeholder="Enter assignment title"
-						required
-						className="bg-transparent dark:text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-					/>
-				</div>
-
-				<div className="mb-4">
-					<label className="block text-sm font-medium mb-2">Description</label>
-					<Textarea
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
-						placeholder="Enter assignment description"
-						rows={4}
-						required
-						className="bg-transparent dark:text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-					/>
-				</div>
-
-				<div className="mb-4">
-					<label className="block text-sm font-medium mb-2">Marks</label>
-					<Input
-						type="number"
-						value={marks}
-						onChange={(e) => setMarks(e.target.value)}
-						placeholder="Enter marks"
-						required
-						className="bg-transparent dark:text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-					/>
-				</div>
-
-				<div className="mb-4">
-					<label className="block text-sm font-medium mb-2">Image URL</label>
-					<Input
-						value={image}
-						onChange={(e) => setImage(e.target.value)}
-						placeholder="Enter image URL"
-						required
-						className="bg-transparent dark:text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500"
-					/>
-				</div>
-
-				<div className="mb-4">
-					<label className="block text-sm font-medium mb-2">
-						Difficulty Level
-					</label>
-					<Select onValueChange={setDifficulty}>
-						<SelectTrigger className="w-full bg-transparent dark:text-white border border-gray-600 focus:ring-blue-500 focus:border-blue-500">
-							{difficulty ? difficulty : "Select Difficulty"}
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="easy">Easy</SelectItem>
-							<SelectItem value="medium">Medium</SelectItem>
-							<SelectItem value="hard">Hard</SelectItem>
-						</SelectContent>
-					</Select>
-				</div>
-
-				<div className="mb-4">
-					<label className="block text-sm font-medium mb-2">Due Date</label>
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button
-								variant="outline"
-								className="w-full text-left bg-transparent border border-gray-600 dark:text-white"
-							>
-								{dueDate ? format(dueDate, "yyyy-MM-dd") : "Select Due Date"}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent align="start">
-							<Calendar
-								mode="single"
-								selected={dueDate}
-								onSelect={setDueDate}
+				{/* Form */}
+				<form
+					onSubmit={handleCreateAssignment}
+					className="bg-white dark:bg-gray-800 shadow rounded-lg p-6"
+				>
+					<div className="grid grid-cols-1 gap-6">
+						{/* Name */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+								Name
+							</label>
+							<Input
+								name="name"
+								value={formData.name}
+								onChange={handleChange}
+								placeholder="Enter your name"
 								required
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
 							/>
-						</PopoverContent>
-					</Popover>
-				</div>
+						</div>
 
-				{successMessage && (
-					<div className="mb-4 text-green-600 font-medium">
-						{successMessage}
+						{/* Email */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+								Email
+							</label>
+							<Input
+								type="email"
+								name="email"
+								value={formData.email}
+								onChange={handleChange}
+								placeholder="Enter your email"
+								required
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+							/>
+						</div>
+
+						{/* Title */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+								Title
+							</label>
+							<Input
+								name="title"
+								value={formData.title}
+								onChange={handleChange}
+								placeholder="Enter assignment title"
+								required
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+							/>
+						</div>
+
+						{/* Description */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+								Description
+							</label>
+							<Textarea
+								name="description"
+								value={formData.description}
+								onChange={handleChange}
+								placeholder="Enter assignment description"
+								rows={4}
+								required
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+							/>
+						</div>
+
+						{/* Marks */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+								Marks
+							</label>
+							<Input
+								type="number"
+								name="marks"
+								value={formData.marks}
+								onChange={handleChange}
+								placeholder="Enter marks"
+								required
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+							/>
+						</div>
+
+						{/* Image URL */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+								Image URL
+							</label>
+							<Input
+								name="image"
+								value={formData.image}
+								onChange={handleChange}
+								placeholder="Enter image URL"
+								required
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+							/>
+						</div>
+
+						{/* Difficulty Level */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+								Difficulty Level
+							</label>
+							<Select
+								value={formData.difficulty}
+								onValueChange={(value) =>
+									setFormData((prev) => ({ ...prev, difficulty: value }))
+								}
+							>
+								<SelectTrigger className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+									{formData.difficulty}
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="easy">Easy</SelectItem>
+									<SelectItem value="medium">Medium</SelectItem>
+									<SelectItem value="hard">Hard</SelectItem>
+								</SelectContent>
+							</Select>
+						</div>
+
+						{/* Due Date */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+								Due Date
+							</label>
+							<Popover>
+								<PopoverTrigger asChild>
+									<Button
+										variant="outline"
+										className="w-full text-left rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+									>
+										{formData.dueDate
+											? format(formData.dueDate, "yyyy-MM-dd")
+											: "Select Due Date"}
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent align="start" className="z-30 relative">
+									<Calendar
+										mode="single"
+										selected={formData.dueDate}
+										onSelect={(date) =>
+											setFormData((prev) => ({ ...prev, dueDate: date }))
+										}
+										required
+									/>
+								</PopoverContent>
+							</Popover>
+						</div>
+
+						{/* Submit Button */}
+						<div>
+							<Button
+								type="submit"
+								className="w-full bg-blue-600 text-white hover:bg-blue-700 rounded-md"
+								disabled={isSubmitting}
+							>
+								{isSubmitting ? "Creating..." : "Create Assignment"}
+							</Button>
+						</div>
 					</div>
-				)}
-
-				<Button type="submit" className="w-full bg-primary text-white ">
-					Create Assignment
-				</Button>
-			</form>
+				</form>
+			</div>
 		</div>
 	);
 };

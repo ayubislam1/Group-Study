@@ -30,9 +30,9 @@ const Assignments = () => {
 			setLoader(true);
 			try {
 				const res = await fetch(
-					`http://localhost:7000/assignments?search=${search}`
+					`https://assignment-11-backend-theta.vercel.app/assignments?search=${search}`
 				);
-				
+
 				const data = await res.json();
 				setAssignments(data);
 				setFilteredAssignments(data);
@@ -80,12 +80,15 @@ const Assignments = () => {
 		}
 
 		try {
-			const res = await fetch(`http://localhost:7000/assignments/${id}`, {
-				method: "DELETE",
-				headers: {
-					"Content-type": "application/json",
-				},
-			});
+			const res = await fetch(
+				`https://assignment-11-backend-theta.vercel.app/assignments/${id}`,
+				{
+					method: "DELETE",
+					headers: {
+						"Content-type": "application/json",
+					},
+				}
+			);
 
 			if (!res.ok) throw new Error("Failed to delete assignment.");
 

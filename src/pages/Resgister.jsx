@@ -48,7 +48,7 @@ export default function Register() {
 
 		createUser(email, pass)
 			.then(() => {
-				fetch("http://localhost:7000/users", {
+				fetch("https://assignment-11-backend-theta.vercel.app/users", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -57,7 +57,6 @@ export default function Register() {
 				})
 					.then((res) => res.json())
 					.then((data) => {
-					
 						if (data.insertedId) {
 							Swal.fire({
 								position: "top-center",
