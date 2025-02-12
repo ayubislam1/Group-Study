@@ -32,7 +32,7 @@ export default function Navbar() {
 	}, []);
 
 	return (
-		<header className="flex h-20 w-full  items-center px-4 md:px-6  border-b-2 sticky top-0 z-50 bg-white">
+		<header className="flex h-20 w-full  items-center px-4 md:px-6  border-b-2 sticky top-0 z-40 bg-white dark:bg-black">
 			<Sheet>
 				<SheetTrigger asChild>
 					<Button variant="outline" size="icon" className="lg:hidden">
@@ -41,7 +41,7 @@ export default function Navbar() {
 					</Button>
 				</SheetTrigger>
 				<SheetContent side="left">
-					<Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
+					<Link href="#" className="mr-6 lg:flex" prefetch={false}>
 						<span className="text-2xl font-bold text-blue-500">StudyDo</span>
 					</Link>
 					<div className="grid gap-2 py-6">
@@ -74,7 +74,7 @@ export default function Navbar() {
 									onClick={handleEvent}
 									prefetch={false}
 								>
-									Log out
+									Log Out
 								</Link>
 							</>
 						)}
@@ -94,14 +94,13 @@ export default function Navbar() {
 								>
 									Register
 								</Link>
-								
 							</>
 						)}
 					</div>
 				</SheetContent>
 			</Sheet>
 
-			<Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
+			<Link href="#" className="mr-6 lg:flex inline-flex ml-20 md:ml-0" prefetch={false}>
 				<img
 					src="https://i.ibb.co.com/Dnd4tsv/istockphoto-1197901679-612x612-removebg-preview-1.png"
 					className="w-10 h-10 mr-1"
@@ -115,13 +114,13 @@ export default function Navbar() {
 			<nav className="ml-auto hidden lg:flex gap-6">
 				<Link
 					to={"/"}
-					className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
+					className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors dark:text-white dark:hover:text-gray-900 hover:bg-gray-100 text-gray-900 focus:outline-none"
 				>
 					Home
 				</Link>
 				<Link
 					to={"/assignments"}
-					className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
+					className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors  dark:text-white dark:hover:text-gray-900 hover:bg-gray-100 text-gray-900 focus:outline-none"
 				>
 					Assignments
 				</Link>
@@ -129,7 +128,7 @@ export default function Navbar() {
 					<>
 						<Link
 							to={"/pending_assignments"}
-							className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
+							className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors  dark:text-white dark:hover:text-gray-900 hover:bg-gray-100 text-gray-900 focus:outline-none"
 						>
 							Pending Assignments
 						</Link>
@@ -139,21 +138,21 @@ export default function Navbar() {
 					<>
 						<Link
 							to={"/login"}
-							className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
+							className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors  dark:text-white dark:hover:text-gray-900 hover:bg-gray-100 text-gray-900 focus:outline-none"
 						>
 							Log In
 						</Link>
 						<Link
 							to={"/register"}
-							className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none"
+							className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors  dark:text-white dark:hover:text-gray-900 hover:bg-gray-100 text-gray-900 focus:outline-none"
 						>
 							Register
 						</Link>
 					</>
 				) : (
-					<div className="relative">
+					<div className="relative ">
 						<div
-							className="flex items-center gap-4 cursor-pointer"
+							className="flex items-center gap-4 cursor-pointer z-50"
 							onMouseEnter={() => setShowDisplayName(true)}
 							onMouseLeave={() => setShowDisplayName(false)}
 							onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -164,7 +163,7 @@ export default function Navbar() {
 								className="h-10 w-10 rounded-full"
 							/>
 							{showDisplayName && (
-								<span className="absolute w-24 top-full mt-1 bg-blue-400 text-white-900 text-base py-1 px-2 rounded-b-md rounded-tr-md shadow-md z-10">
+								<span className="absolute w-24 top-full mt-1 bg-blue-400 text-white-900 text-base py-1 px-2 rounded-b-md rounded-tr-md shadow-md z-50">
 									{user.displayName}
 								</span>
 							)}

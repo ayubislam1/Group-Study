@@ -6,7 +6,7 @@ export default function ArrowUp() {
 	};
 
 	return (
-		<div className="fixed bottom-4 right-4 ">
+		<div className="fixed bottom-4 right-4 z-50 ">
 			<Button
 				variant="outline"
 				className="hover:bg-primary"

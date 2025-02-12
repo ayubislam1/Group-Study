@@ -43,16 +43,19 @@ const PendingAssignments = () => {
 
 	return (
 		<div className="container mx-auto p-5 min-h-screen">
-			<input
+			<div className="md:flex items-center justify-between">
+				<div>	<h1 className="text-2xl font-bold mb-5">Pending Assignments</h1></div>
+				<div><input
 				type="text"
 				placeholder="search"
-				className="input border rounded p-2 text-black"
+				className="input border rounded p-2 text-black w-full mb-5  md:mb-0"
 				onChange={(e) => {
 					setSearch(e.target.value);
 					console.log(e.target.value);
 				}}
 				value={search}
-			/>
+			/></div>
+			</div>
 			{pendingAssignments.length === 0 ? (
 				<div className="min-h-screen flex justify-center items-center">
 					No pending assignments to evaluate.
@@ -60,7 +63,7 @@ const PendingAssignments = () => {
 			) : (
 				<>
 					{" "}
-					<h1 className="text-2xl font-bold mb-5">Pending Assignments</h1>
+				
 					<table className="w-full border-collapse border border-gray-300">
 						<thead>
 							<tr className="bg-gray-100 dark:bg-transparent">
