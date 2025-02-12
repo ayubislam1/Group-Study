@@ -33,7 +33,7 @@ export default function ExamHelpSection() {
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.8 }}
 					>
-						<h2 className="text-5xl font-bold  text-gray-900">
+						<h2 className="text-5xl font-bold  text-gray-900 dark:text-white">
 							<motion.span
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
